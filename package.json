@@ -1,0 +1,30 @@
+{
+	"name": "rollup-plugin-screeps-upload",
+	"version": "0.1.0",
+	"description": "Rollup plugin for uploading to a Screeps server",
+	"main": "dist/rollup-plugin-screeps-upload.js",
+	"types": "dist/rollup-plugin-screeps-upload.d.ts",
+	"repository": "ezolenko/rollup-plugin-screeps-upload",
+	"files": [
+		"dist",
+		"src"
+	],
+	"scripts": {
+		"prebuild": "rimraf dist/*",
+		"build": "tsc",
+		"tslint": "tslint 'src/**/*.ts'; echo"
+	},
+	"author": "@ezolenko",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^8.0.51",
+		"tslib": "^1.8.0",
+		"tslint": "5.8.0",
+		"typescript": "^2.6.1",
+		"rimraf": "^2.6.2"
+	},
+	"dependencies": {
+		"screeps-api": "^1.3.1",
+		"git-rev-sync": "git+https://github.com/ezolenko/git-rev-sync-js#master"
+	}
+}

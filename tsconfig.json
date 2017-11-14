@@ -1,0 +1,46 @@
+{
+	"compilerOptions": {
+		"module": "es2015",
+		"target": "es2017",
+		"moduleResolution": "node",
+		"removeComments": true,
+		"noImplicitAny": true,
+		"experimentalDecorators": true,
+		"strictNullChecks": true,
+		"noUnusedParameters": true,
+		"noUnusedLocals": true,
+		"sourceMap": true,
+		"noImplicitThis": true,
+		"diagnostics": true,
+		"listFiles": true,
+		"pretty": true,
+		"noEmitOnError": false,
+		"noEmitHelpers": false,
+		"importHelpers": false,
+		"traceResolution": false,
+		"isolatedModules": false,
+		"emitDecoratorMetadata": false,
+		"skipDefaultLibCheck": true,
+		"declaration": true,
+		"noImplicitUseStrict": false,
+		"noLib": false,
+		"newLine": "LF",
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"preserveConstEnums": false,
+		"suppressImplicitAnyIndexErrors": false,
+		"lib": [
+			"es7"
+		],
+		"outDir": "./dist"
+	},
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"dist"
+	],
+	"typeAcquisition": {
+		"enable": true
+	}
+}
