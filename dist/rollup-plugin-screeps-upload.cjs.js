@@ -9,19 +9,23 @@ var git = require('git-rev-sync');
 
 const readFile$1 = util.promisify(fs.readFile);
 const readDir = util.promisify(fs.readdir);
+function catchItLater(p) {
+    p.catch(() => { });
+    return p;
+}
 async function upload(configFile, bundleFile) {
     if (configFile === undefined)
         return;
     try {
         const api = new screepsApi.ScreepsAPI();
-        const auth = readFile$1(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth());
+        const auth = catchItLater(readFile$1(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth()));
         const branch$$1 = async () => {
             const url = git.remoteUrl();
             const branch$$1 = git.branch();
             return url === undefined || branch$$1 == undefined ? "undefined" : `${url.replace(/.*[/]/, "")}-${git.branch()}`;
         };
         const root = path.dirname(bundleFile);
-        const jsFiles = readDir(root, "utf-8").then((files) => files.filter((f) => f.endsWith(".js")));
+        const jsFiles = catchItLater(readDir(root, "utf-8").then((files) => files.filter((f) => f.endsWith(".js"))));
         const code = {};
         const loadCode = Promise.all((await jsFiles).map(async (e) => {
             const name = await e;

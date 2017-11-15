@@ -7,6 +7,13 @@ import * as git from "git-rev-sync";
 const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
 
+function catchItLater<T>(p: Promise<T>)
+{
+	// https://stackoverflow.com/questions/40920179/should-i-refrain-from-handling-promise-rejection-asynchronously
+	p.catch(() => {});
+	return p;
+}
+
 async function upload(configFile: string | undefined, bundleFile: string)
 {
 	if (configFile === undefined)
@@ -14,7 +21,7 @@ async function upload(configFile: string | undefined, bundleFile: string)
 	try
 	{
 		const api = new ScreepsAPI();
-		const auth = readFile(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth());
+		const auth = catchItLater(readFile(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth()));
 		const branch = async () =>
 		{
 			const url = git.remoteUrl();
@@ -23,7 +30,7 @@ async function upload(configFile: string | undefined, bundleFile: string)
 		};
 
 		const root = path.dirname(bundleFile);
-		const jsFiles = readDir(root, "utf-8").then((files) => files.filter((f) => (f as string).endsWith(".js")));
+		const jsFiles = catchItLater(readDir(root, "utf-8").then((files) => files.filter((f) => (f as string).endsWith(".js"))));
 
 		const code: { [id: string]: string } = {};
 		const loadCode = Promise.all((await jsFiles).map(async (e) =>
