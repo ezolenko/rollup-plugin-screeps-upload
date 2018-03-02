@@ -3,7 +3,7 @@ import { ScreepsAPI } from 'screeps-api';
 import { readFile, readdir } from 'fs';
 import { dirname, join } from 'path';
 import { promisify } from 'util';
-import { branch, remoteUrl } from 'git-rev-sync';
+import { remoteUrl, branch } from 'git-rev-sync';
 
 const readFile$1 = promisify(readFile);
 const readDir = promisify(readdir);
@@ -15,12 +15,19 @@ async function upload(configFile, bundleFile) {
     if (configFile === undefined)
         return;
     try {
-        const api = new ScreepsAPI();
-        const auth = catchItLater(readFile$1(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth()));
+        readFile$1(configFile, "utf-8");
+        let api;
+        const auth = catchItLater(readFile$1(configFile, "utf-8")
+            .then((data) => {
+            const config = JSON.parse(data);
+            api = new ScreepsAPI(config);
+            if (!config.token)
+                api.auth();
+        }));
         const branch$$1 = async () => {
             const url = remoteUrl();
             const branch$$1 = branch();
-            return url === undefined || branch$$1 == undefined ? "undefined" : `${url.replace(/.*[/]/, "")}-${branch()}`;
+            return url === undefined || branch$$1 === undefined ? "undefined" : `${url.replace(/.*[/]/, "")}-${branch()}`;
         };
         const root = dirname(bundleFile);
         const jsFiles = catchItLater(readDir(root, "utf-8").then((files) => files.filter((f) => f.endsWith(".js"))));

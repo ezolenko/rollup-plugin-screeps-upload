@@ -3,5 +3,5 @@ export interface IRollupBundle {
 }
 export default function screepsUpload(configFile?: string): {
     name: string;
-    onwrite({file}: IRollupBundle): void;
+    onwrite({ file }: IRollupBundle): void;
 };

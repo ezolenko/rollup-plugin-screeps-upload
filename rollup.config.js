@@ -6,13 +6,11 @@ import sourcemaps from "rollup-plugin-sourcemaps";
 const pkg = require("./package.json");
 
 export default {
-	sourcemap: true,
-
     input: "./src/rollup-plugin-screeps-upload.ts",
     output:
     [
-        { format: "cjs", file: pkg.main },
-        { format: "es", file: pkg.jsnext }
+        { format: "cjs", file: pkg.main, banner: "/* eslint-disable */", sourcemap: true },
+        { format: "es", file: pkg.jsnext, banner: "/* eslint-disable */", sourcemap: true }
     ],
 
 	plugins:
@@ -22,8 +20,6 @@ export default {
 		nodeResolve({ jsnext: true, main: true, preferBuiltins: true }),
 		commonjs({ ignoreGlobal: true, include: "node_modules/**" }),
 	],
-
-    banner: "/* eslint-disable */",
 
     external: [ "screeps-api", "git-rev-sync", "fs", "path", "util" ]
 };

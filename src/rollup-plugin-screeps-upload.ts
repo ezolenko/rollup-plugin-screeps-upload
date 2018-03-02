@@ -20,13 +20,21 @@ async function upload(configFile: string | undefined, bundleFile: string)
 		return;
 	try
 	{
-		const api = new ScreepsAPI();
-		const auth = catchItLater(readFile(configFile, "utf-8").then((data) => api.setServer(JSON.parse(data))).then(() => api.auth()));
+		readFile(configFile, "utf-8");
+		let api: any;
+		const auth = catchItLater(readFile(configFile, "utf-8")
+			.then((data) =>
+			{
+				const config = JSON.parse(data);
+				api = new ScreepsAPI(config);
+				if (!config.token)
+					api.auth();
+			}));
 		const branch = async () =>
 		{
 			const url = git.remoteUrl();
 			const branch = git.branch();
-			return url === undefined || branch == undefined ? "undefined" : `${url.replace(/.*[/]/, "")}-${git.branch()}`;
+			return url === undefined || branch === undefined ? "undefined" : `${url.replace(/.*[/]/, "")}-${git.branch()}`;
 		};
 
 		const root = path.dirname(bundleFile);
@@ -36,7 +44,7 @@ async function upload(configFile: string | undefined, bundleFile: string)
 		const loadCode = Promise.all((await jsFiles).map(async (e) =>
 		{
 			const name: string = await e as string;
-			code[name.replace(/\.js$/i, "")] = await readFile(path.join(root, name), "utf-8")
+			code[name.replace(/\.js$/i, "")] = await readFile(path.join(root, name), "utf-8");
 		}));
 
 		await auth;
@@ -51,7 +59,7 @@ async function upload(configFile: string | undefined, bundleFile: string)
 		else
 			await api.raw.user.cloneBranch("", newBranch, code);
 	}
-	catch(err)
+	catch (err)
 	{
 		console.log(`screeps-upload: failed -- ${err.stack}`);
 	}
