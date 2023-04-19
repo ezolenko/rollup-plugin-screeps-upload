@@ -30,7 +30,7 @@
 		"rollup": "^0.56.3"
 	},
 	"dependencies": {
-		"screeps-api": "^1.4.0",
+		"screeps-api": "^1.16.0",
 		"git-rev-sync": "git+https://github.com/ezolenko/git-rev-sync-js#master"
 	}
 }
